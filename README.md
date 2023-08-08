@@ -107,13 +107,13 @@ Example of encoding a trusted HTML block to escape unescaped characters with `en
         );
     </cfscript>
 
-### Service Functions as Lambda Expression
+### 4. Service Functions as Lambda Expression
 
 **HtmlHelper.cfc** passes the functions minifyHtml() and encodeTrustedHtml() as Lambda Expressions to enhance inner local scoping ([see code here at GitHub](https://github.com/andreasRu/cfml-htmlhelper/blob/cc91c88a5e744a27d5006accb5ed9e54cd5e7dc5/components/HtmlHelper.cfc#L16)):
 
 ![cfml html minifier](images/dumpStruct.webp)
 
-### Tips & Security Advisory
+### 5. Tips & Security Advisory
 
 > - **IMPORTANT SECURITY NOTICE:**   `encodeTrustedHtml()` MUST NOT be used to avoid XSS, because it only encodes unencoded characters of the inner HTML (within the body of tags). This function will accept any submitted HTML, JavaScript and Styles and output it as submitted(!) without encoding it for XSS mitigation. For XSS prevention of untrusted HTML you **MUST** continue to use `encodeForHTML()`, `encodeForHTMLAttribute()`, `encodeForJavascript()`, `encodeFor...()` respectively.
 > - The Regex patterns are set to work with CFMLs default 'Perl' Regex-Engine
@@ -121,7 +121,7 @@ Example of encoding a trusted HTML block to escape unescaped characters with `en
 > - `encodeTrustedHTML()` is typically used when you have a fronted CMS with a HTML-Editor where you can manually add custom HTML to a database.
 > - You get best performance when you use `minifyHtml()` only once during the request flow, e.g. at the end of the CFML processing. A good location could be the **Application.cfc** at the end of the `onRequest()` function.
 
-### Downloads
+### 6. Downloads
 
 > - **Raw HtmlHelper.cfc component**: [Download](https://raw.githubusercontent.com/andreasRu/cfml-htmlhelper/master/components/HtmlHelper.cfc)
 > - **Repository as ZIP-File**: [Download](https://github.com/andreasRu/cfml-htmlhelper/archive/refs/heads/master.zip)
@@ -129,7 +129,7 @@ Example of encoding a trusted HTML block to escape unescaped characters with `en
 > - **Example Cfhttp & minifyHtml()**: [Download](https://raw.githubusercontent.com/andreasRu/cfml-htmlhelper/master/examples/cfhttpMinifyHtml.cfm)
 > - **Example encodeTrustedHTML()**: [Download](https://raw.githubusercontent.com/andreasRu/cfml-htmlhelper/master/examples/encodeTrustedHtml.cfm)
 
-### Run repository locally
+### 7. How to run un repository locally
 
 To test or watch the code running locally, you'll need CommandBox as dependency:
 
@@ -138,13 +138,13 @@ To test or watch the code running locally, you'll need CommandBox as dependency:
 > 3. Run `server.bat` on Windows or `server.sh`on MacOs/Linux
 > 4. Wait for commandBox open the browser and load the page
 
-### Donations
+### 8. Remarks
 
 I'm not taking anything for this but if you like or you're using it, I kindly ask you to donate to the **Lucee Organization** to make this awesome cfengine even better:
 
 [Lucee Open Collective Donation](https://opencollective.com/lucee) ❤️
 
-### About
+### 9. About
 
 > - **Author:** Andreas at [Rhein Berg Digital](https://www.rhein-berg-digital.de), <a href="https://www.linkedin.com/in/claudio-andreas-r%C3%BCger-259000199/" target="_blank" rel="nofollow">LinkedIn</a>
 > - **GitHub:** &nbsp;[cfml-htmlhelper](https://github.com/andreasRu/cfml-htmlhelper)
@@ -153,5 +153,3 @@ I'm not taking anything for this but if you like or you're using it, I kindly as
 > - **Software :**&nbsp;[Lucee CFML Engine](https://www.lucee.org/) (GNU LGPL v2.1), [CommandBox](https://www.ortussolutions.com/products/commandbox) (GNU GPLv3), [highlight.js](https://highlightjs.org/) (BSD 3-Clause License, Copyright (c) 2006, Ivan Sagalaev), [normalize.css](https://github.com/necolas/normalize.css) (MIT License, Copyright (c) Nicolas Gallagher and Jonathan Neal), [github-fork-ribbon-css](https://codepo8.github.io/css-fork-on-github-ribbon/) (MIT License, Copyright (c) 2013 Simon Whitaker)
 > - **Imprint:** &nbsp;[Visit here](https://www.rhein-berg-digital.de/en/andreasru-github-io-imprint)
 > - **Privacy Policy:** &nbsp;[Visit the hosters Site Policy](https://docs.github.com/en/site-policy) and the [authors](https://www.rhein-berg-digital.de/en/andreasru-github-io-privacy-policy)
-
-
