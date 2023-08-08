@@ -1,7 +1,7 @@
 component {
 
 	/**********************************************************
-	 *  HTMLHelper.cfc Version 1.0.0:
+	 *  HTMLHelper.cfc Version 0.9.1:
 	 *  A lambda function expressions delivering component that enables
 	 *  basic HTML minifying and html encoding features for trusted HTML
 	 *  For more information please visit:
