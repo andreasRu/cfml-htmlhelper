@@ -1,0 +1,25 @@
+{
+    "name":"cfml-htmlhelper",
+    "force":"true",
+    "JVM":{
+        "heapSize":"2048"
+    },
+    "web":{
+        "host":"localhost",
+        "http":{
+            "port":"8080"
+        },
+        "webroot":"./"
+    },
+    "trayOptions":[
+        {
+            "label":"cfml-htmlhelper",
+            "action":"openbrowser",
+            "url":"http://${runwar.host}:${runwar.port}/",
+            "disabled":false
+        }
+    ],
+    "app":{
+        "cfengine":"https://update.lucee.org/rest/update/provider/forgebox/6.0.0.483-SNAPSHOT"
+    }
+}

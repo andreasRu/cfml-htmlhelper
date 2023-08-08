@@ -1,0 +1,28 @@
+{
+  "name": "cfml-htmlhelper",
+  "version": "1.0.0",
+  "description": "A CFML based component that returns Lambda expressions for minifying HTML at runtime",
+  "scripts": {
+    "cfformat": "box fmt components/*.cfc,Application.cfc,cftasks/*.cfc --overwrite",
+    "startLuceeWindows": "serve.bat",
+    "startLuceeLuceeMacLinux": "serve.sh",
+    "generateStaticHtmlFiles": "box task run ./cfTasks/generateStaticHTML.cfc -cliworkingdir=./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andreasRu/cfml-Htmlhelper.git"
+  },
+  "keywords": [
+    "cfml",
+    "coldfusion",
+    "lucee",
+    "minifier",
+    "html"
+  ],
+  "author": "C. Andreas Rüger",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andreasRu/cfml-htmlhelper/issues"
+  },
+  "homepage": "https://github.com/andreasRu/cfml-htmlhelper#readme"
+}

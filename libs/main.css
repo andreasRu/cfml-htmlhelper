@@ -1,0 +1,265 @@
+html {
+	min-height: 100%;
+	margin: 0;
+	padding: 0;
+	
+}
+
+body {
+	color: #fafafa;
+	font-family: 'Open Sans', sans-serif;
+	font-family: 'Open Sans Light', sans-serif;
+	font-family: 'Open Sans Condensed', sans-serif;
+	background: linear-gradient(92deg, #002e34 10%, #333636 76%);
+	font-size: 1rem;
+	max-width: 992px;
+	margin: auto;
+
+}
+
+h1 {
+	font-weight: 600;
+	font-size: 1.4rem;
+	margin: 1rem;
+}
+
+h2 {
+	color: #96dce4;
+	font-weight: 600;
+	font-size: 1rem;
+	margin: 1rem;
+
+
+}
+
+h3 {
+	color: #00fcc9;
+	margin-top: 5rem;
+	font-size: 1rem;
+	margin: 1rem;
+}
+
+h4 {
+	color: #c9d3d5;
+	margin-top: 1rem;
+	margin: 1rem;
+}
+
+h5 {
+	color: #00fcc9;
+	margin-bottom: 0;
+	font-weight: 300;
+	font-size: 1.2rem;
+	margin: 1rem;
+}
+
+h2,
+h3,
+h5 {
+
+	margin-top: 3rem;
+
+}
+
+img {
+	width: 100%;
+	max-width: 500px;
+}
+
+a,
+a:visited {
+	color: #18efc9;
+	font-family: system-ui;
+	font-weight: 300;
+}
+
+a:hover,
+a:focus,
+a:active {
+	color: #18efc9;
+
+}
+
+p {
+	margin-left: 1rem;
+	margin-right: 1rem;
+}
+
+
+
+blockquote {
+	display: block;
+	margin-block-start: 1em;
+	margin-block-end: 1em;
+	margin-inline-start: 10px;
+	margin-inline-end: 10px;
+}
+
+ul {
+	display: block;
+	list-style-type: disc;
+	margin-block-start: 1em;
+	margin-block-end: 1em;
+	margin-inline-start: 0px;
+	margin-inline-end: 0px;
+	padding-inline-start: 25px;
+}
+
+
+
+
+.hljs-punctuation,
+.hljs-tag {
+	color: #8fc0c5;
+}
+
+.hljs-tag .hljs-name {
+	color: #ea6f6f;
+}
+
+.hljs-tag .hljs-attr {
+	color: #ccb85e;
+}
+
+
+.hljs-tag .hljs-string {
+	color: #9fcbcd;
+}
+
+.hljs-symbol,
+.hljs-title {
+	color: #61aeee;
+}
+
+.hljs,
+pre,
+code {
+	background: #001146;
+	font-size: 0.7rem;
+}
+
+pre {
+	max-height: 18rem;
+	overflow: auto;
+	overflow-y: auto;
+	overflow-x: auto;
+	padding: 0;
+
+}
+
+pre code.hljs {
+	overflow: visible;
+	padding: 1.3rem;
+}
+
+
+pre code.hljs {
+	background: #001146;
+	background: linear-gradient(92deg, #0b081e 50%, #190836 76%);
+	color: #2f6991;
+	color: #ffffff;
+	font-weight: 300;
+}
+
+li code.language-html,
+p code.language-html {
+	background: #777474;
+	color: #00fcc9;
+	font-weight: 400;
+	padding: 0 0.3rem;
+	margin-right: 0.3rem;
+	border-radius: 0.3rem;
+
+}
+
+.footer {
+	margin: 3rem;
+    font-size: 0.8rem;
+    text-align: center;
+    color: cornflowerblue;
+}
+
+
+
+#forkongithub a {
+	background: #000;
+	color: #fff;
+	text-decoration: none;
+	font-family: arial, sans-serif;
+	text-align: center;
+	font-weight: bold;
+	padding: 5px 40px;
+	font-size: 0.6rem;
+	line-height: 1rem;
+	position: relative;
+	transition: 0.5s;
+}
+
+#forkongithub a:hover {
+	background: #56837b;
+	color: #fff;
+}
+
+
+#forkongithub a::before,
+#forkongithub a::after {
+	content: "";
+	width: 100%;
+	display: block;
+	position: absolute;
+	top: 1px;
+	left: 0;
+	height: 1px;
+	background: #fff;
+}
+
+#forkongithub a::after {
+	bottom: 1px;
+	top: auto;
+}
+
+
+#forkongithub {
+	position: fixed;
+	display: block;
+	top: 0;
+	right: 0;
+	width: 200px;
+	overflow: hidden;
+	height: 200px;
+	z-index: 9999;
+}
+
+#forkongithub a {
+	width: 100px;
+	position: absolute;
+	top: 30px;
+	right: -50px;
+	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+}
+
+
+@media only screen and (min-width: 768px) {
+
+	h1 {
+		font-size: 2.5rem;
+		margin-top: 3rem;
+
+	}
+
+	#forkongithub a {
+		width: 150px;
+		font-size: 1rem;
+		top: 50px;
+
+
+	}
+
+
+
+}
