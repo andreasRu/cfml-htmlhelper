@@ -8,9 +8,9 @@
 		<meta name="theme-color" content="&#x23;017f8e">
 		<meta name="description" content="HtmlHelper.cfc: minifyHtml() to get rid of CFML generated whitespace, or use encodeTrustedHtml() to encode HTML of a trusted source that has unencoded characters in inner Html">
 		<meta name="robots" content="index,follow">
-		<meta itemprop="name" content="minifyHtml() &amp; encodeTrustedHtml() | A basic Html Helper Component for CFML">
-		<meta property="og:url" content="https://www.rhein-berg-digital.de/">
-		<meta property="og:title" content="minifyHtml() &amp; encodeTrustedHtml() | A basic Html Helper Component for CFML">
+		<meta itemprop="name" content="minifyHtml() and encodeTrustedHtml() | A basic Html Helper Component for CFML">
+		<meta property="og:url" content="https://andreasru.github.io/cfml-htmlhelper/">
+		<meta property="og:title" content="minifyHtml() and encodeTrustedHtml() | A basic Html Helper Component for CFML">
 		<meta property="og:type" content="website">
 		<meta property="og:site_name" content="A basic Html Helper Component for CFML">
 		<meta property="og:description" content="HtmlHelper.cfc: minifyHtml() to get rid of CFML generated whitespace, or use encodeTrustedHtml() to encode HTML of a trusted source that has unencoded characters in inner Html">
