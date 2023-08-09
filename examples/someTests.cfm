@@ -20,25 +20,34 @@
 		</head> <body>
 <!--     Say "Hello" to the CFML coders! --> <p>Hello to all CFML devs 😀 🤩 around the 🌎!!! </p>
 <script>    /*    this is just some 
-		embedded JavaScript          */
-console.log('Log Something'); // this is just a trailing comment one Javascript
-console.log('Log Something else'); // this is another trailing comment with a trailing double// 
-// a third javascript comment beginning at the line; 
-    // a fourth javascript comment in the middle; 
-// and some more comment with another outcommented Javascript // console.log('this shouldn't show!'); 
+	embedded JavaScript          */
+
+/* this is just some embedded JavaScript */   
+
+console.log('Log Something'); // 1. this is just a trailing comment one Javascript
+console.log('Log Something else'); // 2. this is another trailing comment with a trailing double// 
+   /* this is just some embedded JavaScript 
+*//* test */  
+ /* this is just some embedded JavaScript */  
+/* this is just some embedded JavaScript */  
+
+// 3. a third javascript comment beginning at the line; 
+    // 4. a fourth javascript comment in the middle; 
+// 5. and some more comment with another outcommented Javascript // 6. console.log('this shouldn't show!'); 
      console.log('Log final');  
 	 
 	 </script>        </body> </html>
 	</cfsavecontent>
+	
 	<cfscript>
 	htmlHelperService=new components.HtmlHelper();
 	cfcontent( reset = "true" );
 	writeoutput( 
 		htmlHelperService.minifyHtml( 
 			htmlString=someHtmlBlock, 
-			compressWhitespaces=true,
-			stripScriptAndCssComments=true,
-			stripHtmlComments=false, 
+			compressWhitespaces=false,
+			stripScriptAndCssComments=false,
+			stripHtmlComments=true, 
 			stripEmptySpacesBetweenHtmlElements=true )
 	);
 </cfscript>
