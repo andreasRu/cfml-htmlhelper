@@ -11,6 +11,7 @@ body {
 	font-family: 'Open Sans Light', sans-serif;
 	font-family: 'Open Sans Condensed', sans-serif;
 	background: linear-gradient(92deg, #002e34 10%, #333636 76%);
+	background: linear-gradient(92deg, #002e34 30%, #106c6c 76%);
 	font-size: 1rem;
 	max-width: 992px;
 	margin: auto;
@@ -21,6 +22,7 @@ h1 {
 	font-weight: 600;
 	font-size: 1.4rem;
 	margin: 1rem;
+	margin-top: 6rem;
 }
 
 h2 {
@@ -73,6 +75,16 @@ a:visited {
 	font-weight: 300;
 }
 
+li, ul {
+	line-height: 1.5rem;
+}
+
+li {
+	margin-top:0.5rem;
+	margin-bottom: 0.5rem;
+}
+
+
 a:hover,
 a:focus,
 a:active {
@@ -91,7 +103,7 @@ blockquote {
 	display: block;
 	margin-block-start: 1em;
 	margin-block-end: 1em;
-	margin-inline-start: 10px;
+	margin-inline-start: 30px;
 	margin-inline-end: 10px;
 }
 
@@ -134,12 +146,15 @@ ul {
 .hljs,
 pre,
 code {
-	background: #001146;
-	font-size: 0.7rem;
+	background: transparent;
+	font-size: 0.9rem;
+	margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 
 pre {
-	max-height: 18rem;
+	background: linear-gradient(92deg, #0b081e 50%, #604876 76%);
+	max-height: 20rem;
 	overflow: auto;
 	overflow-y: auto;
 	overflow-x: auto;
@@ -149,13 +164,11 @@ pre {
 
 pre code.hljs {
 	overflow: visible;
-	padding: 1.3rem;
+	padding: 0 1rem;
 }
 
 
 pre code.hljs {
-	background: #001146;
-	background: linear-gradient(92deg, #0b081e 50%, #190836 76%);
 	color: #2f6991;
 	color: #ffffff;
 	font-weight: 300;
@@ -163,9 +176,10 @@ pre code.hljs {
 
 li code.language-html,
 p code.language-html {
-	background: #777474;
-	color: #00fcc9;
-	font-weight: 400;
+	font-family: monospace,monospace;
+	background: #494848;;
+	color: #84e1e1;
+	font-weight: 300;
 	padding: 0 0.3rem;
 	margin-right: 0.3rem;
 	border-radius: 0.3rem;

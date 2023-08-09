@@ -1,4 +1,4 @@
-# HtmlHelper.cfc (Vers. 0.9.1)
+# HtmlHelper.cfc (Vers. 0.9.2)
 
 ---
 
@@ -46,6 +46,15 @@ The function `minifyHtml()` minifies CFML generated html content by:
 > - stripping CSS comments
 > - stripping whitespaces, such as all double tabs/spaces/newlines
 > - honouring and preserving the content within `<pre></pre>` or `<code></code>` tags as submitted
+
+Passing arguments to minifyHtml() is possible (e.g `minifyHtml( htmlString=htmlBlock, stripHtmlComments=true )`)
+
+> - **htmlString** *( string required )*: a string containing the complete html code to be minified.
+> - **stripScriptAndCssComments** *( boolean/default=true )*: removes all comments between script and style tags. Single line JavaScript comments will be converted to multiline to not break JavaScript Functionality
+> - **stripHtmlComments** *( boolean/default=true )*: removes all HTML comments (e.g. `<!-- My comment -->`)
+> - **compressWhitespaces** *( boolean/default=true )*: compresses any multiple whitespaces (e.g. new lines, spaces or tabs ) by unifying them to one single space, converting the passed html string from multiline to a single lined html block.
+> - **stripEmptySpacesBetweenHtmlElements** *( boolean/default=true )*: removes all whitespaces between html tags ( e.g. from `<div>    <div> Hello World <span> ! </span>   </div>    </div>` results in `<div><div> Hello World span> ! </span></div></div>`).
+
 
 ### 2. encodeTrustedHTML( string trustedHtml required )&#59;
 
@@ -115,7 +124,7 @@ Example of encoding a trusted HTML block to escape unescaped characters with `en
 
 ### 5. Tips & Security Advisory
 
-> - **IMPORTANT SECURITY NOTICE:**   `encodeTrustedHtml()` MUST NOT be used to avoid XSS, because it only encodes unencoded characters of the inner HTML (within the body of tags). This function will accept any submitted HTML, JavaScript and Styles and output it as submitted(!) without encoding it for XSS mitigation. For XSS prevention of untrusted HTML you **MUST** continue to use `encodeForHTML()`, `encodeForHTMLAttribute()`, `encodeForJavascript()`, `encodeFor...()` respectively.
+> - **IMPORTANT SECURITY NOTICE:**  `encodeTrustedHtml()` MUST NOT be used to avoid XSS, because it only encodes unencoded characters of the inner HTML (within the body of tags). This function will accept any submitted HTML, JavaScript and Styles and output it as submitted(!) without encoding it for XSS mitigation. For XSS prevention of untrusted HTML you **MUST** continue to use `encodeForHTML()`, `encodeForHTMLAttribute()`, `encodeForJavascript()`, `encodeFor...()` respectively.
 > - The Regex patterns are set to work with CFMLs default 'Perl' Regex-Engine
 > - When using `encodeTrustedHTML()` always make sure to keep all the charsets among the stream "in sync". Having different charsets for templates, web charset, charset http headers, or resource charsets may have unpredictable wrong html-entities and characters.
 > - `encodeTrustedHTML()` is typically used when you have a fronted CMS with a HTML-Editor where you can manually add custom HTML to a database.
@@ -129,7 +138,7 @@ Example of encoding a trusted HTML block to escape unescaped characters with `en
 > - **Example Cfhttp & minifyHtml()**: [Download](https://raw.githubusercontent.com/andreasRu/cfml-htmlhelper/master/examples/cfhttpMinifyHtml.cfm)
 > - **Example encodeTrustedHTML()**: [Download](https://raw.githubusercontent.com/andreasRu/cfml-htmlhelper/master/examples/encodeTrustedHtml.cfm)
 
-### 7. How to run un repository locally
+### 7. How to run the repository locally
 
 To test or watch the code running locally, you'll need CommandBox as dependency:
 

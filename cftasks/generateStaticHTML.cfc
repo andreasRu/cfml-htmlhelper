@@ -21,7 +21,7 @@ component {
 
 		print.boldCyanLine( "Retrieving http to http://localhost:8080" );
 		htmlHelperService = new components.HtmlHelper();
-		resultFinal=result.filecontent.replacenocase("If you want to see an enhanced version of this page, please visit <a href=""https://andreasru.github.io/cfml-htmlhelper/"">https&##x3a;&##x2f;&##x2f;andreasru.github.io&##x2f;cfml-htmlhelper&##x2f;</a>","","ALL");
+		resultFinal = result.filecontent.replacenocase( "If you want to see an enhanced version of this page, please visit <a href=""https://andreasru.github.io/cfml-htmlhelper/"">https&##x3a;&##x2f;&##x2f;andreasru.github.io&##x2f;cfml-htmlhelper&##x2f;</a>", "", "ALL" );
 		print.boldCyanLine( "Minifying content" );
 		minifiedfilecontent = htmlHelperService.minifyHtml( resultFinal );
 		print.boldCyanLine( "CfContent minified" );
@@ -35,7 +35,7 @@ component {
 		print.boldCyanLine( "Copying images to distro..." );
 		directoryCopy( source = basePath & "images", destination = basePath & "docs/images", recurse = true );
 
-	
+
 		print.GreenLine( "READY!" );
 	}
 

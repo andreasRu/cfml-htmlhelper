@@ -1,7 +1,7 @@
 component {
 
 	/**********************************************************
-	 *  HTMLHelper.cfc Version 0.9.1:
+	 *  HTMLHelper.cfc Version 0.9.2:
 	 *  A lambda function expressions delivering component that enables
 	 *  basic HTML minifying and html encoding features for trusted HTML
 	 *  For more information please visit:
@@ -61,7 +61,7 @@ component {
 				}
 
 
-				// remove all newlines/tabs
+				// remove all newlines/tabs and spaces
 				result = encodeForHTML( result.reReplace( "\s+", " ", "all" ) );
 
 
@@ -84,8 +84,21 @@ component {
 
 				return trim( result.reReplace( "> <", "><", "all" ) );
 			},
-			"minifyHtml": (required string htmlString) => {
+			"minifyHtml": (
+				required string htmlString,
+				boolean stripScriptAndCssComments,
+				boolean stripHtmlComments,
+				boolean compressWhitespaces,
+				boolean stripEmptySpacesBetweenHtmlElements
+			) => {
 				result = arguments.htmlString;
+
+				// set defaults or pass args
+				stripScriptAndCssComments = arguments.stripScriptAndCssComments ?: true;
+				stripHtmlComments = arguments.stripHtmlComments ?: true;
+				compressWhitespaces = arguments.compressWhitespaces ?: true;
+				stripEmptySpacesBetweenHtmlElements = arguments.stripEmptySpacesBetweenHtmlElements ?: true;
+
 
 				htmlCodeTagMapArray = reFind(
 					"(?i)(<code.*?\/code>|<pre.*?\/pre>)",
@@ -95,29 +108,46 @@ component {
 					"ALL"
 				);
 
-
+				// map spacing honoured elements
 				if( arrayLen( htmlCodeTagMapArray ) > 1 or htmlCodeTagMapArray[ 1 ].len[ 1 ] > 0 ) {
 					result = mapHTMLtags( result, htmlCodeTagMapArray, "CO" );
 				}
 
 				// main minifying happens here
-				result = result
-					.reReplace( "<!--.*?-->", "", "all" ) // remove hardcoded html(multiline/singleline) comments
-					.reReplace( "(\s\/\/.*?)(\n|<\/script)", "\2", "all" ) // remove hardcoded javascript inline comments
-					.reReplace( "(\s*)\/\*(.|\n)*?\*\/", "", "all" ) // remove hardcoded javascript/css multiline comments;
-					.reReplace( "(\s+|\n+|\t+)", " ", "all" ); // remove all double tabs/spaces/newlines
+				if( stripHtmlComments ) {
+					result = result.reReplace( "<!--.*?-->", "", "all" ); // remove hardcoded html(multiline/singleline) comments
+				}
 
+				if( stripScriptAndCssComments ) {
+					result = result
+						.reReplace( "(\s*)\/\*(.|\n)*?\*\/", "", "all" ) // remove hardcoded javascript/css multiline comments;
+						.reReplace( "\s?(\/\/)(.*?)(\n|<\/script)", "\3", "all" ) // remove hardcoded javascript singleline comments
+				}
+				elseif( compressWhitespaces ){
+					result = result.reReplace( "\s?(\/\/)(.*?)(\n|<\/script)", "/*\2*/\3", "all" ) // convert single line comments to multiline, otherwise it will break javascript
+				}
+
+				if( compressWhitespaces ) {
+					result = result.reReplace( "\s+", " ", "all" ); // compress all double tabs/spaces/newlines to single spaces
+				}
+
+				// copy spacing honoured elements back
 				if( arrayLen( htmlCodeTagMapArray ) > 1 or htmlCodeTagMapArray[ 1 ].len[ 1 ] > 0 ) {
 					result = unMapHTMLtags( result, htmlCodeTagMapArray, "CO" );
 				}
 
+				if( stripEmptySpacesBetweenHtmlElements ) {
+					result = result.reReplace( "(>\s+<)", "><", "all" )
+				}
+
 				// return with final mini-minifcation and trimming
-				return trim( result.reReplace( "(>\s+<)", "><", "all" ) );
+				return trim( result );
 			}
-		};
+		}
 
 		return service;
 	}
+
 
 
 	private string function mapHTMLtags( required string htmlContent, required array arrayMap, required string tagSuffix ) {
@@ -130,6 +160,7 @@ component {
 
 		return trim( result );
 	}
+
 
 	private string function unMapHTMLtags( required string htmlContent, required array arrayMap, required string tagSuffix ) {
 		startString = service.demarkerStart & arguments.tagSuffix;
