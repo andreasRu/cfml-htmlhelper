@@ -1,7 +1,10 @@
 html {
 	min-height: 100%;
+	max-height: 1000000px;
 	margin: 0;
 	padding: 0;
+	text-size-adjust: none;
+	-webkit-text-size-adjust: none;
 	
 }
 
