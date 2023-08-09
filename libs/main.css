@@ -10,7 +10,6 @@ body {
 	font-family: 'Open Sans', sans-serif;
 	font-family: 'Open Sans Light', sans-serif;
 	font-family: 'Open Sans Condensed', sans-serif;
-	background: linear-gradient(92deg, #002e34 10%, #333636 76%);
 	background: linear-gradient(92deg, #002e34 30%, #106c6c 76%);
 	font-size: 1rem;
 	max-width: 992px;
@@ -154,7 +153,7 @@ code {
 }
 
 pre {
-	background: linear-gradient(92deg, #0b081e 50%, #604876 76%);
+	background: linear-gradient(137deg, #000000 50%, #604876 90%);
 	max-height: 20rem;
 	overflow: auto;
 	overflow-y: auto;
