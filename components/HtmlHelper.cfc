@@ -118,14 +118,22 @@ component {
 					result = result.reReplace( "<!--.*?-->", "", "all" ); // remove hardcoded html(multiline/singleline) comments
 				}
 
+				
+
 				if( stripScriptAndCssComments ) {
+					
 					result = result
-						.reReplace( "(\s*)\/\*(.|\n)*?\*\/", "", "all" ) // remove hardcoded javascript/css multiline comments;
-						.reReplace( "\s?(\/\/)(.*?)(\n|<\/script)", "\3", "all" ) // remove hardcoded javascript singleline comments
-				}
+						.reReplace( "(\s*)\/\*(.|\n)*?\*\/", " ", "all" ) // remove hardcoded javascript/css multiline comments;
+						.reReplace( "([\n|\r]+)\/\/.*?(\n|<\/script)", "\2", "all" ) // remove hardcoded javascript inline comments
+						.reReplace( "\s+\/\/.*?(\n|<\/script)", "\1", "all" ) // remove hardcoded javascript inline comments
+					}
+
+				
 				elseif( compressWhitespaces ){
 					result = result.reReplace( "\s?(\/\/)(.*?)(\n|<\/script)", "/*\2*/\3", "all" ) // convert single line comments to multiline, otherwise it will break javascript
 				}
+
+				
 
 				if( compressWhitespaces ) {
 					result = result.reReplace( "\s+", " ", "all" ); // compress all double tabs/spaces/newlines to single spaces
