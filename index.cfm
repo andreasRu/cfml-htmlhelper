@@ -49,6 +49,8 @@
 
 		hljs.highlightAll();
 	</script>
+	<!---cfset local.ExecTime=GetTickCount()-request.ExecStart>
+	<cfoutput><div class="timeCount">Execution: #local.ExecTime#ms</div></cfoutput--->
 	</body>
 
 	</html>

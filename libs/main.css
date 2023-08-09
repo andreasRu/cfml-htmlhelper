@@ -152,6 +152,14 @@ code {
     margin-bottom: 2rem;
 }
 
+.timeCount{
+
+	position:fixed;
+	font-size: 0.6rem;
+	bottom: 0;
+	right:0;
+}
+
 pre {
 	background: linear-gradient(137deg, #000000 50%, #604876 90%);
 	max-height: 20rem;
