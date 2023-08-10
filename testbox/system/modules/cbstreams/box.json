@@ -1,0 +1,57 @@
+{
+    "name":"CBStreams",
+    "version":"2.0.1+12",
+    "location":"https://downloads.ortussolutions.com/ortussolutions/coldbox-modules/cbstreams/2.0.1/cbstreams-2.0.1.zip",
+    "author":"Ortus Solutions, Corp",
+    "homepage":"https://github.com/ortus-solutions/cbstreams",
+    "documentation":"https://github.com/ortus-solutions/cbstreams",
+    "repository":{
+        "type":"git",
+        "url":"https://github.com/ortus-solutions/cbstreams"
+    },
+    "bugs":"https://github.com/ortus-solutions/cbstreams/issues",
+    "shortDescription":"The CFML implementation of Java Streams",
+    "slug":"cbstreams",
+    "type":"modules",
+    "keywords":"java streams, reactive, streaming",
+    "license":[
+        {
+            "type":"Apache2",
+            "url":"http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    ],
+    "contributors":[],
+    "dependencies":{
+        "cbproxies":"^1.0.0"
+    },
+    "devDependencies":{
+        "commandbox-cfformat":"*",
+        "commandbox-docbox":"*",
+        "commandbox-dotenv":"*",
+        "commandbox-cfconfig":"*"
+    },
+    "installPaths":{
+        "cbproxies":"modules/cbproxies/"
+    },
+    "ignore":[
+        "**/.*",
+        "build/**",
+        "test-harness",
+        "/server*.json"
+    ],
+    "testbox":{
+        "runner":"http://localhost:60299/tests/runner.cfm"
+    },
+    "scripts":{
+        "build:module":"task run taskFile=build/Build.cfc :projectName=`package show slug` :version=`package show version`",
+        "build:docs":"task run taskFile=build/Build.cfc target=docs :projectName=`package show slug` :version=`package show version`",
+        "release":"recipe build/release.boxr",
+        "format":"cfformat run ModuleConfig.cfc,models/,test-harness/tests/**/*.cfc ./.cfformat.json --overwrite",
+        "format:watch":"cfformat watch ModuleConfig.cfc,models/,test-harness/tests/**/*.cfc ./.cfformat.json",
+        "format:check":"cfformat check ModuleConfig.cfc,models/,test-harness/tests/**/*.cfc ./.cfformat.json",
+        "cfpm":"echo '\".engine/adobe2021/WEB-INF/cfusion/bin/cfpm.sh\"' | run",
+        "cfpm:install":"echo '\".engine/adobe2021/WEB-INF/cfusion/bin/cfpm.sh\" install ${1}' | run",
+        "install:2021":"run-script cfpm:install zip,debugger",
+        "install:dependencies":"install && cd test-harness && install"
+    }
+}

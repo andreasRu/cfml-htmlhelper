@@ -134,7 +134,7 @@ component {
 				}
 				
 
-				if( compressWhitespaces ) {
+				if( compressWhitespaces  ) {
 					result = result.reReplace( "\s+", " ", "all" ); // compress all double tabs/spaces/newlines to single spaces
 				}
 
