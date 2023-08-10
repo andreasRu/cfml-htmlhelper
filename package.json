@@ -6,8 +6,10 @@
     "cfformat": "box fmt components/*.cfc,Application.cfc,cftasks/*.cfc --overwrite",
     "startLuceeWindows": "serve.bat",
     "startLuceeLuceeMacLinux": "serve.sh",
-    "generateStaticHtmlFiles": "box task run ./cfTasks/generateStaticHTML.cfc -cliworkingdir=./"
-  },
+    "generateStaticHtmlFiles": "box task run ./cfTasks/generateStaticHTML.cfc -cliworkingdir=./",
+	"Run Tests": "start http://localhost:8080/testbox/tests/runner.cfm",
+	"Get Sources Of Tests": "start http://localhost:8080/mytests/getHttpTestResults.cfm"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/andreasRu/cfml-Htmlhelper.git"
