@@ -8,6 +8,6 @@
 			compressWhitespaces=true,
 			stripScriptAndCssComments=true,
 			stripHtmlComments=true, 
-			stripEmptySpacesBetweenHtmlElements=false ) 
+			stripEmptySpacesBetweenHtmlElements=true ) 
 	);
 </cfscript>

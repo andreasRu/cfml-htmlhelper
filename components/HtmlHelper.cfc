@@ -1,7 +1,7 @@
 component {
 
 	/**********************************************************
-	 *  HTMLHelper.cfc Version 0.9.2:
+	 *  HTMLHelper.cfc Version 0.9.3:
 	 *  A lambda function expressions delivering component that enables
 	 *  basic HTML minifying and html encoding features for trusted HTML
 	 *  For more information please visit:
@@ -130,7 +130,29 @@ component {
 				
 				elseif( compressWhitespaces ){
 
-					result = result.reReplace( "(\s)+\/\/(.*?)(\r|\n|<\/script)", "/*\2*/\3", "all" ) // convert single line comments to multiline, otherwise it will break javascript
+					// map multiline comments
+					multilineCommentArray = reFind(
+						"(\s)+\/\*(.|\n)*?\*\/",
+						result,
+						1,
+						true,
+						"ALL"
+					);
+
+					// make sure to honour all multiline comments spacing honoured elements
+					if( arrayLen( multilineCommentArray ) > 1 or multilineCommentArray[ 1 ].len[ 1 ] > 0 ) {
+						result = mapHTMLtags( result, multilineCommentArray, "ML" );
+					}
+
+					// replace of inline comments and make multiline comments of it
+					result = result.reReplace( "(\s)+\/\/[^\/]+(.*?)(\r|\n|<\/script)", "/*\2*/\3", "all" ) // convert single line comments to multiline, otherwise it will break javascript
+				
+					// unmap multiline comments
+					if( arrayLen( multilineCommentArray ) > 1 or multilineCommentArray[ 1 ].len[ 1 ] > 0 ) {
+						result = unMapHTMLtags( result, multilineCommentArray, "ML" );
+					}
+
+
 				}
 				
 

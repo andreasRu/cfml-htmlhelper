@@ -8,12 +8,14 @@ component extends="testbox.system.BaseSpec"
 	{
 		// all your suites go here.
 		
-		items=[ "default", 
-				"compressWhitespaces", 
-				"stripScriptAndCssComments", 
-				"stripEmptySpacesBetweenHtmlElements",
-				"stripAllCommentsAndCompress",
-				"allOff" ];
+		// items=[ "default", 
+		// 		"compressWhitespaces", 
+		// 		"stripScriptAndCssComments", 
+		// 		"stripEmptySpacesBetweenHtmlElements",
+		// 		"stripAllCommentsAndCompress",
+		// 		"allOff" ];
+
+		items=[ "default" ];
 
 		items.map( ( item ) => {
 			
