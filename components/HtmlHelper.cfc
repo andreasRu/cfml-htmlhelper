@@ -14,8 +14,56 @@ component {
 
 	public function init() {
 		local.service = {
-			"demarkerStart": "_s1.",
-			"demarkerEnd": "_e2.",
+			"demarkerStart": "_1.",
+			"demarkerEnd": "_2.",
+
+			"doStripScriptAndCssComments": ( htmlcontent ) => {
+				return htmlcontent
+							.reReplace( "(\s)+\/\*(.|\n)*?\*\/", " ", "all" ) // remove hardcoded javascript/css multiline comments;
+							.reReplace( "(\s)+\/\/.*?(\r|\n|<\/script)", "\2", "all" ) // remove hardcoded javascript inline comments
+		
+			},
+
+			"convertSingleLineCommentsToMultlineComments": ( htmlcontent ) => {
+
+				result= htmlcontent;
+
+				// map multiline comments
+				multilineCommentArray = reFind(
+					"(\s)+\/\*(.|\n)*?\*\/",
+					result,
+					1,
+					true,
+					"ALL"
+				);
+
+				// make sure to honour all multiline comments spacing honoured elements
+				if( arrayLen( multilineCommentArray ) > 1 or multilineCommentArray[ 1 ].len[ 1 ] > 0 ) {
+					result = mapHTMLtags( result, multilineCommentArray, "C" );
+				}
+
+				// replace of inline comments and make multiline comments of it
+				result = result.reReplace( "(\s)+\/\/[^\/]+(.*?)(\r|\n|<\/script)", "/*\2*/\3", "all" ) // convert single line comments to multiline, otherwise it will break javascript
+			
+				// unmap multiline comments
+				if( arrayLen( multilineCommentArray ) > 1 or multilineCommentArray[ 1 ].len[ 1 ] > 0 ) {
+					result = unMapHTMLtags( result, multilineCommentArray, "C" );
+				}
+			},
+			"doStripHtmlComments": ( htmlcontent ) => {
+
+				return 	htmlcontent.reReplace( "<!--.*?-->", "", "all" ); // remove hardcoded html(multiline/singleline) comments
+			
+			},
+			"doCompressWhiteSpaces":  ( htmlcontent ) => {
+
+				return 	htmlcontent.reReplace( "\s+", " ", "all" ); // compress all double tabs/spaces/newlines to single spaces
+				
+
+			},
+			"doStripEmptySpacesBetweenHtmlElements": ( htmlcontent ) => {
+				return htmlcontent.reReplace( "(>\s+<)", "><", "all" )
+			},
 			"encodeTrustedHtml": (required string htmlString) => {
 				result = arguments.htmlString;
 
@@ -46,18 +94,18 @@ component {
 
 				// map tags with body )
 				if( arrayLen( htmlBlocksMapArray ) > 1 or htmlBlocksMapArray[ 1 ].len[ 1 ] > 0 ) {
-					result = mapHTMLtags( result, htmlBlocksMapArray, "CO" );
+					result = mapHTMLtags( result, htmlBlocksMapArray, "C" );
 				}
 
 
 				// map default tags
 				if( arrayLen( htmlSingleTagMapArray ) > 1 or htmlSingleTagMapArray[ 1 ].len[ 1 ] > 0 ) {
-					result = mapHTMLtags( result, htmlSingleTagMapArray, "SI" );
+					result = mapHTMLtags( result, htmlSingleTagMapArray, "S" );
 				}
 
 				// map all HTML ENTITIES
 				if( arrayLen( htmlHTMLEntitiesMapArray ) > 1 or htmlHTMLEntitiesMapArray[ 1 ].len[ 1 ] > 0 ) {
-					result = mapHTMLtags( result, htmlHTMLEntitiesMapArray, "EN" );
+					result = mapHTMLtags( result, htmlHTMLEntitiesMapArray, "X" );
 				}
 
 
@@ -67,19 +115,19 @@ component {
 
 				// unmap all HTML ENTITIES
 				if( arrayLen( htmlHTMLEntitiesMapArray ) > 1 or htmlHTMLEntitiesMapArray[ 1 ].len[ 1 ] > 0 ) {
-					result = unMapHTMLtags( result, htmlHTMLEntitiesMapArray, "EN" );
+					result = unMapHTMLtags( result, htmlHTMLEntitiesMapArray, "X" );
 				}
 
 
 				// unmap default tags
 				if( arrayLen( htmlSingleTagMapArray ) > 1 or htmlSingleTagMapArray[ 1 ].len[ 1 ] > 0 ) {
-					result = unMapHTMLtags( result, htmlSingleTagMapArray, "SI" );
+					result = unMapHTMLtags( result, htmlSingleTagMapArray, "S" );
 				}
 
 
 				// unmap tags with body )
 				if( arrayLen( htmlBlocksMapArray ) > 1 or htmlBlocksMapArray[ 1 ].len[ 1 ] > 0 ) {
-					result = unMapHTMLtags( result, htmlBlocksMapArray, "CO" );
+					result = unMapHTMLtags( result, htmlBlocksMapArray, "C" );
 				}
 
 				return trim( result.reReplace( "> <", "><", "all" ) );
@@ -110,7 +158,7 @@ component {
 
 				// map spacing honoured elements
 				if( arrayLen( htmlCodeTagMapArray ) > 1 or htmlCodeTagMapArray[ 1 ].len[ 1 ] > 0 ) {
-					result = mapHTMLtags( result, htmlCodeTagMapArray, "CO" );
+					result = mapHTMLtags( result, htmlCodeTagMapArray, "C" );
 				}
 
 				// main minifying happens here
@@ -141,7 +189,7 @@ component {
 
 					// make sure to honour all multiline comments spacing honoured elements
 					if( arrayLen( multilineCommentArray ) > 1 or multilineCommentArray[ 1 ].len[ 1 ] > 0 ) {
-						result = mapHTMLtags( result, multilineCommentArray, "ML" );
+						result = mapHTMLtags( result, multilineCommentArray, "M" );
 					}
 
 					// replace of inline comments and make multiline comments of it
@@ -149,7 +197,7 @@ component {
 				
 					// unmap multiline comments
 					if( arrayLen( multilineCommentArray ) > 1 or multilineCommentArray[ 1 ].len[ 1 ] > 0 ) {
-						result = unMapHTMLtags( result, multilineCommentArray, "ML" );
+						result = unMapHTMLtags( result, multilineCommentArray, "M" );
 					}
 
 
@@ -162,7 +210,7 @@ component {
 
 				// copy spacing honoured elements back
 				if( arrayLen( htmlCodeTagMapArray ) > 1 or htmlCodeTagMapArray[ 1 ].len[ 1 ] > 0 ) {
-					result = unMapHTMLtags( result, htmlCodeTagMapArray, "CO" );
+					result = unMapHTMLtags( result, htmlCodeTagMapArray, "C" );
 				}
 
 				if( stripEmptySpacesBetweenHtmlElements ) {
