@@ -61,8 +61,8 @@ component {
 				}
 
 
-				// remove all newlines/tabs and spaces
-				result = encodeForHTML( result.reReplace( "\s+", " ", "all" ) );
+				// encode for html everythng that is within bodys
+				result = encodeForHTML( result );
 
 
 				// unmap all HTML ENTITIES
@@ -101,7 +101,7 @@ component {
 
 
 				htmlCodeTagMapArray = reFind(
-					"(?i)(<code.*?\/code>|<pre.*?\/pre>)",
+					"(?i)(<code.*?\/code>|<pre.*?\/pre>|<textarea.*?\/textarea>)",
 					result,
 					1,
 					true,
