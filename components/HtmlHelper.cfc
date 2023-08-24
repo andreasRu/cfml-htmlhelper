@@ -1,4 +1,4 @@
-component output=false {
+component output = false {
 
 	/**********************************************************
 	 *  HTMLHelper.cfc Version 0.9.4:
@@ -14,19 +14,19 @@ component output=false {
 
 	public function init() {
 		local.service = {
-			"version"					 : "0.9.4",
-			"debug"					 	 : false,
-			"demarkerStart"              : "_1.",
-			"demarkerEnd"                : "_2.",
-			"debugResult"				 : function( htmlstring, label="", regexForDump ){
-						// if set to debug force output!
-						if( service.debug ){
-							writeoutput("<hr>" & label & ":");
-							if(structKeyExists(arguments, "regexForDump")){
-								dump( htmlstring.reMatch( arguments.regexForDump ) );
-							}	
-							writeoutput("<pre style='font-size:0.6rem;border:1px solid red;'><code>" & encodeForHTML( htmlstring ) & "</code></pre>" );
-						}
+			"version"      : "0.9.4",
+			"debug"        : false,
+			"demarkerStart": "_1.",
+			"demarkerEnd"  : "_2.",
+			"debugResult"  : function( htmlstring, label = "", regexForDump ) {
+				// if set to debug force output!
+				if( service.debug ) {
+					writeOutput( "<hr>" & label & ":" );
+					if( structKeyExists( arguments, "regexForDump" ) ) {
+						dump( htmlstring.reMatch( arguments.regexForDump ) );
+					}
+					writeOutput( "<pre style='font-size:0.6rem;border:1px solid red;'><code>" & encodeForHTML( htmlstring ) & "</code></pre>" );
+				}
 			},
 			"reduceArrayAndReplaceString": function( arrayWithElements, contentString, replaceWith ) {
 				replaceWith = arguments.replaceWith;
@@ -37,57 +37,57 @@ component output=false {
 			"stripMultlineComments": function( htmlcontent ) {
 				stringsToRemove = [];
 				result          = arguments.htmlcontent;
-				service.debugResult( htmlstring=result, label="stripMultlineComments",regexForDump= "(\s)+\/\*(.|\n)*?\*\/"  ); 
-				
+				service.debugResult( htmlstring = result, label = "stripMultlineComments", regexForDump = "(\s)+\/\*(.|\n)*?\*\/" );
+
 				stringsToRemove.append( result.reMatch( "(\s)+\/\*(.|\n)*?\*\/" ), true );
 				result = service.reduceArrayAndReplaceString( stringsToRemove, result, "" );
-				service.debugResult( htmlstring=result, label="Result" ); 
+				service.debugResult( htmlstring = result, label = "Result" );
 				return result;
 			},
 			"stripSingleLineComments": function( htmlcontent ) {
 				stringsToRemove = [];
 				result          = arguments.htmlcontent;
-				service.debugResult( htmlstring=result, label="stripSingleLineComments",regexForDump="(\s)+(?:\/\/)(.*?)[\r|\n]"  ); 
+				service.debugResult( htmlstring = result, label = "stripSingleLineComments", regexForDump = "(\s)+(?:\/\/)(.*?)[\r|\n]" );
 				stringsToRemove.append( result.reMatch( "(\s)+(?:\/\/)(.*?)[\r|\n]" ), true );
-				result = service.reduceArrayAndReplaceString( stringsToRemove, result, chr(10) );
-				service.debugResult( htmlstring=result, label="Result" ); 
+				result = service.reduceArrayAndReplaceString( stringsToRemove, result, chr( 10 ) );
+				service.debugResult( htmlstring = result, label = "Result" );
 				return result;
 			},
 			"stripHtmlComments": function( htmlcontent ) {
 				stringsToRemove = [];
 				result          = arguments.htmlcontent;
-				service.debugResult( htmlstring=result, label="stripHtmlComments",regexForDump="<!--.*?-->"  ); 
+				service.debugResult( htmlstring = result, label = "stripHtmlComments", regexForDump = "<!--.*?-->" );
 				stringsToRemove.append( result.reMatch( "<!--.*?-->" ), true );
 				result = service.reduceArrayAndReplaceString( stringsToRemove, result, "" );
-				service.debugResult( htmlstring=result, label="Result" ); 
+				service.debugResult( htmlstring = result, label = "Result" );
 				return result;
 			},
 			"compressBlankSpaces": function( htmlcontent ) {
 				stringsToRemove = [];
 				result          = arguments.htmlcontent;
-				service.debugResult( htmlstring=result, label="compressBlankSpaces" ); 
+				service.debugResult( htmlstring = result, label = "compressBlankSpaces" );
 				stringsToRemove.append( result.reMatch( "[ \t]+" ), true ); // compress spaces/tabs to single spaces
-				result = service.reduceArrayAndReplaceString( stringsToRemove, result, " " ).reReplace( "\s+[\n\r]", chr(10), "ALL" );
-				service.debugResult( htmlstring=result, label="Result" ); 
+				result = service.reduceArrayAndReplaceString( stringsToRemove, result, " " ).reReplace( "\s+[\n\r]", chr( 10 ), "ALL" );
+				service.debugResult( htmlstring = result, label = "Result" );
 				return result;
 			},
 			"compressNewLines": function( htmlcontent, replaceWith ) {
 				stringsToRemove = [];
 				result          = arguments.htmlcontent;
-				service.debugResult( htmlstring=result, label="compressNewLines" ); 
-				
+				service.debugResult( htmlstring = result, label = "compressNewLines" );
+
 				stringsToRemove.append( result.reMatch( "[\n\r]+" ), true ); // compress spaces/tabs to single spaces
 				result = service.reduceArrayAndReplaceString( stringsToRemove, result, arguments.replaceWith );
-				service.debugResult( htmlstring=result, label="Result" ); 
+				service.debugResult( htmlstring = result, label = "Result" );
 				return result;
 			},
 			"stripEmptySpacesBetweenHtmlElements": function( htmlcontent, replaceWith ) {
 				stringsToRemove = [];
 				result          = arguments.htmlcontent;
-				service.debugResult( htmlstring=result, label="stripEmptySpacesBetweenHtmlElements"  ); 
+				service.debugResult( htmlstring = result, label = "stripEmptySpacesBetweenHtmlElements" );
 				stringsToRemove.append( result.reMatch( ">\s+<" ), true ); // compress spaces/tabs to single spaces
 				result = service.reduceArrayAndReplaceString( stringsToRemove, result, arguments.replaceWith );
-				service.debugResult( htmlstring=result, label="Result" ); 
+				service.debugResult( htmlstring = result, label = "Result" );
 				return result;
 			},
 			"encodeTrustedHtml": function( required string htmlString ) {
@@ -154,7 +154,7 @@ component output=false {
 				if( argStripHtmlComments ) {
 					result = service.stripHtmlComments( result );
 				}
-					
+
 				if( argStripScriptAndCssComments ) {
 					result = service.stripMultlineComments( result );
 					result = service.stripSingleLineComments( result );
