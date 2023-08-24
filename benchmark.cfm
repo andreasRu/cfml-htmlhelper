@@ -277,10 +277,10 @@ with lazy continuation.</p>
 	</html>
 </cfsavecontent>
 <cfscript>
-for (i = 1; i < 5; i++) {
+for (i = 1; i < 3; i++) {
 	htmlcontent=htmlcontent & htmlcontent;
 }
-dump(len( htmlcontent ));
+dump(var=len( htmlcontent ), label="TestString.Length()" );
 htmlHelperService=new components.HtmlHelper();
 cftimer( label="minifyHTML & encodeTrustedHtml", type="outline"){
 
@@ -300,15 +300,12 @@ cftimer( label="encodeTrustedHtml", type="outline"){
 	
 }
 
-cftimer( label="doCompressWhiteSpaces", type="outline"){
+cftimer( label="compressBlankSpaces", type="outline"){
 
-	a=htmlHelperService.doCompressWhiteSpaces( htmlcontent );
+	a=htmlHelperService.compressBlankSpaces( htmlcontent );
 	
 }
 
-cftimer( label="doStripScriptAndCssComments", type="outline"){
 
-	a=htmlHelperService.doStripScriptAndCssComments( htmlcontent );
-	
-}
+
 </cfscript>

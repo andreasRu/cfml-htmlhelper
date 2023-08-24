@@ -29,18 +29,18 @@ component extends="testbox.system.BaseSpec"
 
 
 					// load minifyHTML args and load expected HTML output
-					include template="../includes/#item#Result.txt";
+					include template="../includes/#item#Result.cfm";
 					// load HTML input
-					include template="../includes/#item#.txt";
+					include template="../includes/#item#.cfm";
 					
 				
 					var result = htmlHelperService.minifyHtml( 
 						htmlString=request.testArgs.tmpHtmlInput, 
-						compressWhitespaces=request.testArgs.compressWhitespaces,
 						stripScriptAndCssComments=request.testArgs.stripScriptAndCssComments,
 						stripHtmlComments=request.testArgs.stripHtmlComments, 
 						stripEmptySpacesBetweenHtmlElements=request.testArgs.stripEmptySpacesBetweenHtmlElements );
-
+					dump( htmlHelperService.version );
+					//writeoutput( htmlHelperService.version );
 					expect( trim( local.result ) ).toBe( trim( request.testArgs.tmpHtmlResultOutput )  );
 				
 			

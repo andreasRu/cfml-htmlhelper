@@ -1,6 +1,6 @@
 {
   "name": "cfml-htmlhelper",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "A CFML based component that returns Lambda expressions for minifying HTML at runtime",
   "scripts": {
     "cfformat": "box fmt components/*.cfc,Application.cfc,cftasks/*.cfc --overwrite",

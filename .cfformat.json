@@ -1,5 +1,5 @@
 {
-    "alignment.consecutive.assignments":false,
+    "alignment.consecutive.assignments":true,
     "alignment.consecutive.params":false,
     "alignment.consecutive.properties":false,
     "alignment.doc_comments":true,
@@ -22,7 +22,7 @@
     "function_anonymous.multiline.leading_comma":false,
     "function_anonymous.multiline.leading_comma.padding":true,
     "function_anonymous.multiline.min_length":40,
-    "function_anonymous.padding":false,
+    "function_anonymous.padding":true,
     "function_anonymous.spacing_to_group":false,
     "function_call.casing.builtin":"cfdocs",
     "function_call.casing.userdefined":"ignored",

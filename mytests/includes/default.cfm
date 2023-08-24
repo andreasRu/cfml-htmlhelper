@@ -1,7 +1,25 @@
-
 <cfprocessingdirective pageEncoding="UTF-8">
-<cfsavecontent variable="request.testArgs.tmpHtmlInput"><!DOCTYPE html>
-<script>
+<cfsavecontent variable="request.testArgs.tmpHtmlInput">
+	
+	
+	
+	<!DOCTYPE html>
+	<head>
+	<title>Hot CFML Page & content</title>
+				<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>  
+	.someClass{ 
+	font-size: 1rem;         } </style>
+																				
+																									
+																									
+	<meta name="description" content="Just some Example">
+	<link rel="stylesheet" href="css/main.css">
+		</head> <body>
+	<!--     Say "Hello" to the CFML coders! --> <p>Hello to all CFML devs 😀 🤩 around the 🌎!!! </p>
+	<script>
 console.log("Step0");
 /* Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
  sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquy
@@ -53,5 +71,6 @@ console.log("Step13");
 // Lorem ipsum dolor sit amet, consetetur sadipscing elitr https://some-local.local
 console.log("Step14");
 console.log("Step15");
-</script>
-</cfsavecontent>
+        </script>
+	 
+	       </body> </html></cfsavecontent>

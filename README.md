@@ -40,19 +40,17 @@ If you want to see an enhanced version of this page, please visit [https://andre
 
 The function `minifyHtml()` minifies CFML generated html content by:
 
-> - stripping HTML comments
-> - stripping JavaScript multline comments
-> - stripping JavaScript singleline comments
-> - stripping CSS comments
 > - stripping whitespaces, such as all double tabs/spaces/newlines
-> - honouring and preserving the content within `<pre></pre>` or `<code></code>` tags as submitted
+> - stripping HTML comments
+> - stripping JavaScript comments (multiline and singleline)
+> - stripping CSS comments
+> - honouring and preserving the body content of `<pre>`, `<code>` and `<textarea>`
 
 Passing arguments to minifyHtml() is possible (e.g `minifyHtml( htmlString=htmlBlock, stripHtmlComments=true )`)
 
 > - **htmlString** *( string required )*: a string containing the complete html code to be minified.
 > - **stripScriptAndCssComments** *( boolean/default=true )*: removes all comments between script and style tags. Single line JavaScript comments will be converted to multiline to not break JavaScript Functionality
 > - **stripHtmlComments** *( boolean/default=true )*: removes all HTML comments (e.g. `<!-- My comment -->`)
-> - **compressWhitespaces** *( boolean/default=true )*: compresses any multiple whitespaces (e.g. new lines, spaces or tabs ) by unifying them to one single space, converting the passed html string from multiline to a single lined html block.
 > - **stripEmptySpacesBetweenHtmlElements** *( boolean/default=true )*: removes all whitespaces between html tags ( e.g. from `<div>    <div> Hello World <span> ! </span>   </div>    </div>` results in `<div><div> Hello World span> ! </span></div></div>`).
 
 

@@ -1,7 +1,7 @@
-component {
+component output=false {
 
 	/**********************************************************
-	 *  HTMLHelper.cfc Version 0.9.3:
+	 *  HTMLHelper.cfc Version 0.9.4:
 	 *  A lambda function expressions delivering component that enables
 	 *  basic HTML minifying and html encoding features for trusted HTML
 	 *  For more information please visit:
@@ -14,238 +14,177 @@ component {
 
 	public function init() {
 		local.service = {
-			"demarkerStart": "_1.",
-			"demarkerEnd": "_2.",
-
-			"doStripScriptAndCssComments": ( htmlcontent ) => {
-				return htmlcontent
-							.reReplace( "(\s)+\/\*(.|\n)*?\*\/", " ", "all" ) // remove hardcoded javascript/css multiline comments;
-							.reReplace( "(\s)+\/\/.*?(\r|\n|<\/script)", "\2", "all" ) // remove hardcoded javascript inline comments
-		
+			"version"					 : "0.9.4",
+			"debug"					 	 : false,
+			"demarkerStart"              : "_1.",
+			"demarkerEnd"                : "_2.",
+			"debugResult"				 : function( htmlstring, label="", regexForDump ){
+						// if set to debug force output!
+						if( service.debug ){
+							writeoutput("<hr>" & label & ":");
+							if(structKeyExists(arguments, "regexForDump")){
+								dump( htmlstring.reMatch( arguments.regexForDump ) );
+							}	
+							writeoutput("<pre style='font-size:0.6rem;border:1px solid red;'><code>" & encodeForHTML( htmlstring ) & "</code></pre>" );
+						}
 			},
-
-			"convertSingleLineCommentsToMultlineComments": ( htmlcontent ) => {
-
-				result= htmlcontent;
-
-				// map multiline comments
-				multilineCommentArray = reFind(
-					"(\s)+\/\*(.|\n)*?\*\/",
-					result,
-					1,
-					true,
-					"ALL"
-				);
-
-				// make sure to honour all multiline comments spacing honoured elements
-				if( arrayLen( multilineCommentArray ) > 1 or multilineCommentArray[ 1 ].len[ 1 ] > 0 ) {
-					result = mapHTMLtags( result, multilineCommentArray, "C" );
-				}
-
-				// replace of inline comments and make multiline comments of it
-				result = result.reReplace( "(\s)+\/\/[^\/]+(.*?)(\r|\n|<\/script)", "/*\2*/\3", "all" ) // convert single line comments to multiline, otherwise it will break javascript
-			
-				// unmap multiline comments
-				if( arrayLen( multilineCommentArray ) > 1 or multilineCommentArray[ 1 ].len[ 1 ] > 0 ) {
-					result = unMapHTMLtags( result, multilineCommentArray, "C" );
-				}
+			"reduceArrayAndReplaceString": function( arrayWithElements, contentString, replaceWith ) {
+				replaceWith = arguments.replaceWith;
+				return arguments.arrayWithElements.reduce( function( acc, element, index, theArray ) {
+					return acc.replace( element, replaceWith );
+				}, arguments.contentString );
 			},
-			"doStripHtmlComments": ( htmlcontent ) => {
-
-				return 	htmlcontent.reReplace( "<!--.*?-->", "", "all" ); // remove hardcoded html(multiline/singleline) comments
-			
-			},
-			"doCompressWhiteSpaces":  ( htmlcontent ) => {
-
-				return 	htmlcontent.reReplace( "\s+", " ", "all" ); // compress all double tabs/spaces/newlines to single spaces
+			"stripMultlineComments": function( htmlcontent ) {
+				stringsToRemove = [];
+				result          = arguments.htmlcontent;
+				service.debugResult( htmlstring=result, label="stripMultlineComments",regexForDump= "(\s)+\/\*(.|\n)*?\*\/"  ); 
 				
-
+				stringsToRemove.append( result.reMatch( "(\s)+\/\*(.|\n)*?\*\/" ), true );
+				result = service.reduceArrayAndReplaceString( stringsToRemove, result, "" );
+				service.debugResult( htmlstring=result, label="Result" ); 
+				return result;
 			},
-			"doStripEmptySpacesBetweenHtmlElements": ( htmlcontent ) => {
-				return htmlcontent.reReplace( "(>\s+<)", "><", "all" )
+			"stripSingleLineComments": function( htmlcontent ) {
+				stringsToRemove = [];
+				result          = arguments.htmlcontent;
+				service.debugResult( htmlstring=result, label="stripSingleLineComments",regexForDump="(\s)+(?:\/\/)(.*?)[\r|\n]"  ); 
+				stringsToRemove.append( result.reMatch( "(\s)+(?:\/\/)(.*?)[\r|\n]" ), true );
+				result = service.reduceArrayAndReplaceString( stringsToRemove, result, chr(10) );
+				service.debugResult( htmlstring=result, label="Result" ); 
+				return result;
 			},
-			"encodeTrustedHtml": (required string htmlString) => {
-				result = arguments.htmlString;
+			"stripHtmlComments": function( htmlcontent ) {
+				stringsToRemove = [];
+				result          = arguments.htmlcontent;
+				service.debugResult( htmlstring=result, label="stripHtmlComments",regexForDump="<!--.*?-->"  ); 
+				stringsToRemove.append( result.reMatch( "<!--.*?-->" ), true );
+				result = service.reduceArrayAndReplaceString( stringsToRemove, result, "" );
+				service.debugResult( htmlstring=result, label="Result" ); 
+				return result;
+			},
+			"compressBlankSpaces": function( htmlcontent ) {
+				stringsToRemove = [];
+				result          = arguments.htmlcontent;
+				service.debugResult( htmlstring=result, label="compressBlankSpaces" ); 
+				stringsToRemove.append( result.reMatch( "[ \t]+" ), true ); // compress spaces/tabs to single spaces
+				result = service.reduceArrayAndReplaceString( stringsToRemove, result, " " ).reReplace( "\s+[\n\r]", chr(10), "ALL" );
+				service.debugResult( htmlstring=result, label="Result" ); 
+				return result;
+			},
+			"compressNewLines": function( htmlcontent, replaceWith ) {
+				stringsToRemove = [];
+				result          = arguments.htmlcontent;
+				service.debugResult( htmlstring=result, label="compressNewLines" ); 
+				
+				stringsToRemove.append( result.reMatch( "[\n\r]+" ), true ); // compress spaces/tabs to single spaces
+				result = service.reduceArrayAndReplaceString( stringsToRemove, result, arguments.replaceWith );
+				service.debugResult( htmlstring=result, label="Result" ); 
+				return result;
+			},
+			"stripEmptySpacesBetweenHtmlElements": function( htmlcontent, replaceWith ) {
+				stringsToRemove = [];
+				result          = arguments.htmlcontent;
+				service.debugResult( htmlstring=result, label="stripEmptySpacesBetweenHtmlElements"  ); 
+				stringsToRemove.append( result.reMatch( ">\s+<" ), true ); // compress spaces/tabs to single spaces
+				result = service.reduceArrayAndReplaceString( stringsToRemove, result, arguments.replaceWith );
+				service.debugResult( htmlstring=result, label="Result" ); 
+				return result;
+			},
+			"encodeTrustedHtml": function( required string htmlString ) {
+				stringsToMap = [];
+				unmapper     = [ : ];
+				result       = arguments.htmlString;
 
-				htmlBlocksMapArray = reFind(
-					"(?i)(<!--.*?-->|<script.*?\/script>|<style.*?\/style>|<code.*?\/code>|<pre.*?\/pre>)",
-					result,
-					1,
-					true,
-					"ALL"
-				);
+				stringsToMap.append( result.reMatch( "(?i)(<!--.*?-->|<script.*?\/script>|<style.*?\/style>|<code.*?\/code>|<pre.*?\/pre>)" ), true );
+				result = stringsToMap.reduce( function( acc, element, index, theArray ) {
+					mapID = "_.C#index#._";
+					unmapper.insert( "#mapID#", element );
+					return acc.replace( element, mapID );
+				}, result );
 
-				htmlSingleTagMapArray = reFind( "<(.*?)>", result, 1, true, "ALL" );
+				stringsToMap.append( result.reMatch( "<[^>]*?>" ), true );
+				result = stringsToMap.reduce( function( acc, element, index, theArray ) {
+					mapID = "_.S#index#._";
+					unmapper.insert( "#mapID#", element );
+					return acc.replace( element, mapID );
+				}, result );
 
-				// map all pure HTML entities (e.g &amp; &copy; &#169; &#8126; &#xA9; #x000000000a9;)
-				htmlEntitiesWithoutBoundariesRegEx = "&(" & chr( 35 ) & "[0-9|xa-f0-9]+|[a-z0-9]+);";
-				htmlHTMLEntitiesMapArray = reFindNoCase(
-					htmlEntitiesWithoutBoundariesRegEx,
-					result,
-					1,
-					true,
-					"ALL"
-				);
-
-				/************************************
-				 * Copy/replace html tags to properly escape to apply safely encodeforHTML()
-				 *************************************/
-
-
-				// map tags with body )
-				if( arrayLen( htmlBlocksMapArray ) > 1 or htmlBlocksMapArray[ 1 ].len[ 1 ] > 0 ) {
-					result = mapHTMLtags( result, htmlBlocksMapArray, "C" );
-				}
-
-
-				// map default tags
-				if( arrayLen( htmlSingleTagMapArray ) > 1 or htmlSingleTagMapArray[ 1 ].len[ 1 ] > 0 ) {
-					result = mapHTMLtags( result, htmlSingleTagMapArray, "S" );
-				}
-
-				// map all HTML ENTITIES
-				if( arrayLen( htmlHTMLEntitiesMapArray ) > 1 or htmlHTMLEntitiesMapArray[ 1 ].len[ 1 ] > 0 ) {
-					result = mapHTMLtags( result, htmlHTMLEntitiesMapArray, "X" );
-				}
-
+				stringsToMap.append( result.reMatch( "(?i)&(" & chr( 35 ) & "[0-9|xa-f0-9]+|[a-z0-9]+);" ), true );
+				result = stringsToMap.reduce( function( acc, element, index, theArray ) {
+					mapID = "_.E#index#._";
+					unmapper.insert( "#mapID#", element );
+					return acc.replace( element, mapID );
+				}, result );
 
 				// encode for html everythng that is within bodys
-				result = encodeForHTML( result );
+				result = encodeForHTML( result.reReplace( "\s+", " ", "all" ) );
 
+				result = unmapper.reduce( function( content, key, value ) {
+					return content.replace( key, value );
+				}, result );
 
-				// unmap all HTML ENTITIES
-				if( arrayLen( htmlHTMLEntitiesMapArray ) > 1 or htmlHTMLEntitiesMapArray[ 1 ].len[ 1 ] > 0 ) {
-					result = unMapHTMLtags( result, htmlHTMLEntitiesMapArray, "X" );
-				}
-
-
-				// unmap default tags
-				if( arrayLen( htmlSingleTagMapArray ) > 1 or htmlSingleTagMapArray[ 1 ].len[ 1 ] > 0 ) {
-					result = unMapHTMLtags( result, htmlSingleTagMapArray, "S" );
-				}
-
-
-				// unmap tags with body )
-				if( arrayLen( htmlBlocksMapArray ) > 1 or htmlBlocksMapArray[ 1 ].len[ 1 ] > 0 ) {
-					result = unMapHTMLtags( result, htmlBlocksMapArray, "C" );
-				}
-
-				return trim( result.reReplace( "> <", "><", "all" ) );
+				return result;
 			},
-			"minifyHtml": (
+			"minifyHtml": function(
 				required string htmlString,
 				boolean stripScriptAndCssComments,
 				boolean stripHtmlComments,
-				boolean compressWhitespaces,
 				boolean stripEmptySpacesBetweenHtmlElements
-			) => {
-				result = arguments.htmlString;
+			) {
+				stringsToMap = [];
+				unmapper     = [ : ];
+				result       = arguments.htmlString;
 
 				// set defaults or pass args
-				stripScriptAndCssComments = arguments.stripScriptAndCssComments ?: true;
-				stripHtmlComments = arguments.stripHtmlComments ?: true;
-				compressWhitespaces = arguments.compressWhitespaces ?: true;
-				stripEmptySpacesBetweenHtmlElements = arguments.stripEmptySpacesBetweenHtmlElements ?: true;
+				argStripScriptAndCssComments           = arguments.stripScriptAndCssComments ?: true;
+				argStripHtmlComments                   = arguments.stripHtmlComments ?: true;
+				argStripEmptySpacesBetweenHtmlElements = arguments.stripEmptySpacesBetweenHtmlElements ?: true;
+
+				stringsToMap.append( result.reMatch( "(?i)(<code.*?/code>|<pre.*?\/pre>|<textarea.*?\/textarea>)" ), true );
+				result = stringsToMap.reduce( function( acc, element, index, theArray ) {
+					mapID = "_.#index#._";
+					unmapper.insert( "#mapID#", element );
+					return acc.replace( element, mapID );
+				}, result );
 
 
-				htmlCodeTagMapArray = reFind(
-					"(?i)(<code.*?\/code>|<pre.*?\/pre>|<textarea.*?\/textarea>)",
-					result,
-					1,
-					true,
-					"ALL"
-				);
+				// whitespace 1
+				result = trim( service.compressBlankSpaces( result ) );
 
-				// map spacing honoured elements
-				if( arrayLen( htmlCodeTagMapArray ) > 1 or htmlCodeTagMapArray[ 1 ].len[ 1 ] > 0 ) {
-					result = mapHTMLtags( result, htmlCodeTagMapArray, "C" );
+				if( argStripHtmlComments ) {
+					result = service.stripHtmlComments( result );
 				}
-
-				// main minifying happens here
-				if( stripHtmlComments ) {
-					result = result.reReplace( "<!--.*?-->", "", "all" ); // remove hardcoded html(multiline/singleline) comments
-				}
-
-				
-
-				if( stripScriptAndCssComments ) {
 					
-					result = result
-						.reReplace( "(\s)+\/\*(.|\n)*?\*\/", " ", "all" ) // remove hardcoded javascript/css multiline comments;
-						.reReplace( "(\s)+\/\/.*?(\r|\n|<\/script)", "\2", "all" ) // remove hardcoded javascript inline comments
-						}
-
-				
-				elseif( compressWhitespaces ){
-
-					// map multiline comments
-					multilineCommentArray = reFind(
-						"(\s)+\/\*(.|\n)*?\*\/",
-						result,
-						1,
-						true,
-						"ALL"
-					);
-
-					// make sure to honour all multiline comments spacing honoured elements
-					if( arrayLen( multilineCommentArray ) > 1 or multilineCommentArray[ 1 ].len[ 1 ] > 0 ) {
-						result = mapHTMLtags( result, multilineCommentArray, "M" );
-					}
-
-					// replace of inline comments and make multiline comments of it
-					result = result.reReplace( "(\s)+\/\/[^\/]+(.*?)(\r|\n|<\/script)", "/*\2*/\3", "all" ) // convert single line comments to multiline, otherwise it will break javascript
-				
-					// unmap multiline comments
-					if( arrayLen( multilineCommentArray ) > 1 or multilineCommentArray[ 1 ].len[ 1 ] > 0 ) {
-						result = unMapHTMLtags( result, multilineCommentArray, "M" );
-					}
-
-
-				}
-				
-
-				if( compressWhitespaces  ) {
-					result = result.reReplace( "\s+", " ", "all" ); // compress all double tabs/spaces/newlines to single spaces
+				if( argStripScriptAndCssComments ) {
+					result = service.stripMultlineComments( result );
+					result = service.stripSingleLineComments( result );
 				}
 
-				// copy spacing honoured elements back
-				if( arrayLen( htmlCodeTagMapArray ) > 1 or htmlCodeTagMapArray[ 1 ].len[ 1 ] > 0 ) {
-					result = unMapHTMLtags( result, htmlCodeTagMapArray, "C" );
+				// whitespace new lines
+				if( argStripScriptAndCssComments ) {
+					result = service.compressNewLines( result, "" );
+				} else {
+					// make sure compressing new lines won't break the page because of double slashed "//" comments
+					// better would be a function that converts // comments into /* multiline */
+					result = service.stripSingleLineComments( result );
+					result = service.compressNewLines( result, "" );
+					// result = service.compressNewLines( result, chr(10) );
 				}
 
-				if( stripEmptySpacesBetweenHtmlElements ) {
-					result = result.reReplace( "(>\s+<)", "><", "all" )
-				}
+				result = unmapper.reduce( function( content, key, value ) {
+					return content.replace( key, value );
+				}, result );
 
-				// return with final mini-minifcation and trimming
-				return trim( result );
+				if( argStripEmptySpacesBetweenHtmlElements ) {
+					result = service.stripEmptySpacesBetweenHtmlElements( result, "><" );
+				} else {
+					result = service.stripEmptySpacesBetweenHtmlElements( result, ">#chr( 10 )#<" );
+				}
+				return result;
 			}
 		}
 
 		return service;
-	}
-
-
-
-	private string function mapHTMLtags( required string htmlContent, required array arrayMap, required string tagSuffix ) {
-		result = arguments.htmlContent;
-		startString = service.demarkerStart & arguments.tagSuffix;
-		endString = service.demarkerEnd;
-		return arguments.arrayMap.reduce( (acc, element, index, theArray) => {
-			return acc.replace( theArray[ index ].match[ 1 ], startString & index & endString )
-		}, result );
-
-		return trim( result );
-	}
-
-
-	private string function unMapHTMLtags( required string htmlContent, required array arrayMap, required string tagSuffix ) {
-		startString = service.demarkerStart & arguments.tagSuffix;
-		endString = service.demarkerEnd;
-
-		return arguments.arrayMap.reduce( (acc, element, index, theArray) => {
-			return acc.replace( startString & index & endString, theArray[ index ].match[ 1 ] )
-		}, result );
 	}
 
 }
