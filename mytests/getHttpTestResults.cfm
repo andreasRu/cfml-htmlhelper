@@ -9,4 +9,6 @@
 			stripHtmlComments=true, 
 			stripEmptySpacesBetweenHtmlElements=true ) 
 	);
+	
 </cfscript>
+<cfdump var="#htmlHelperService#">

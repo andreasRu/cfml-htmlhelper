@@ -1,4 +1,4 @@
-# HtmlHelper.cfc (Vers. 0.9.4)
+# HtmlHelper.cfc (Vers. 0.9.5)
 
 ---
 
@@ -51,8 +51,6 @@ Passing arguments to minifyHtml() is possible (e.g `minifyHtml( htmlString=htmlB
 > - **htmlString** *( string required )*: a string containing the complete html code to be minified.
 > - **stripScriptAndCssComments** *( boolean/default=true )*: removes all comments between script and style tags. Single line JavaScript comments will be converted to multiline to not break JavaScript Functionality
 > - **stripHtmlComments** *( boolean/default=true )*: removes all HTML comments (e.g. `<!-- My comment -->`)
-> - **stripEmptySpacesBetweenHtmlElements** *( boolean/default=true )*: removes all whitespaces between html tags ( e.g. from `<div>    <div> Hello World <span> ! </span>   </div>    </div>` results in `<div><div> Hello World span> ! </span></div></div>`).
-
 
 ### 2. encodeTrustedHTML( string trustedHtml required )&#59;
 
@@ -114,9 +112,9 @@ Example of encoding a trusted HTML block to escape unescaped characters with `en
         );
     </cfscript>
 
-### 4. Service Functions as Lambda Expression
+### 4. Service Functions as Closure Expression
 
-**HtmlHelper.cfc** passes the functions minifyHtml() and encodeTrustedHtml() as Lambda Expressions to enhance inner local scoping ([see code here at GitHub](https://github.com/andreasRu/cfml-htmlhelper/blob/cc91c88a5e744a27d5006accb5ed9e54cd5e7dc5/components/HtmlHelper.cfc#L16)):
+**HtmlHelper.cfc** passes the functions minifyHtml() and encodeTrustedHtml() as Closure Expressions to enhance inner local scoping ([see code here at GitHub](https://github.com/andreasRu/cfml-htmlhelper/blob/cc91c88a5e744a27d5006accb5ed9e54cd5e7dc5/components/HtmlHelper.cfc#L16)):
 
 ![cfml html minifier](images/dumpStruct.webp)
 

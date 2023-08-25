@@ -20,7 +20,7 @@ component output = false {
 			
 			"debug"        : false,
 			"demarkerStart": "_1.",
-			"demarkerEnd"  : "_2.",
+			"demarkerEnd"  : "_e2.",
 			"debugResult"  : function( htmlstring, label = "", regexForDump ) {
 				// if set to debug force output!
 				if( service.debug ) {
