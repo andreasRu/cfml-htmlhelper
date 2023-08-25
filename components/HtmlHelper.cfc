@@ -15,17 +15,29 @@ component output = false {
 	public function init() {
 		local.service = {
 			"version"      : "0.9.4",
-			"debug"        : false,
+			"startTickCount": getTickCount(),
+			"debug"        : true,
 			"demarkerStart": "_1.",
 			"demarkerEnd"  : "_2.",
 			"debugResult"  : function( htmlstring, label = "", regexForDump ) {
 				// if set to debug force output!
 				if( service.debug ) {
 					writeOutput( "<hr>" & label & ":" );
-					if( structKeyExists( arguments, "regexForDump" ) ) {
-						dump( htmlstring.reMatch( arguments.regexForDump ) );
+					if( !arguments.label=="result" ){ 
+						writeOutput( "HtmlString.Length(): " & len( arguments.HtmlString ) ) ;
+				
+					}else{
+						writeOutput( "TimeStamp: " & ((getTickCount() - service.startTickCount)) & "ms" ) ;
+						service.startTickCount=getTickCount();
 					}
-					writeOutput( "<pre style='font-size:0.6rem;border:1px solid red;'><code>" & encodeForHTML( htmlstring ) & "</code></pre>" );
+					
+					if( structKeyExists( arguments, "regexForDump" ) ) {
+						writeOutput( "Regex: /" & encodeForHTML( arguments.regexForDump ) & "/" );
+						//dump( htmlstring.reMatch( arguments.regexForDump ) );
+						
+					}
+					
+					writeOutput( "<pre style='font-size:0.6rem;border:1px solid red;max-height:3rem;overflow:auto;'><code>" & encodeForHTML( htmlstring ) & "</code></pre>" );
 				}
 			},
 			"reduceArrayAndReplaceString": function( arrayWithElements, contentString, replaceWith ) {
@@ -65,9 +77,10 @@ component output = false {
 			"compressBlankSpaces": function( htmlcontent ) {
 				stringsToRemove = [];
 				result          = arguments.htmlcontent;
-				service.debugResult( htmlstring = result, label = "compressBlankSpaces" );
-				stringsToRemove.append( result.reMatch( "[ \t]+" ), true ); // compress spaces/tabs to single spaces
-				result = service.reduceArrayAndReplaceString( stringsToRemove, result, " " ).reReplace( "\s+[\n\r]", chr( 10 ), "ALL" );
+				service.debugResult( htmlstring = result, label = "compressBlankSpaces", regexForDump = "[ \t]+" );
+				resure=result.reReplace( "[ \t]+", " ", "All" ).reReplace( "\s+[\n\r]+", chr( 10 ), "ALL" );
+				// stringsToRemove.append( result.reMatch( "[ \t]+" ), true ); // compress spaces/tabs to single spaces
+				// result = service.reduceArrayAndReplaceString( stringsToRemove, result, " " ).reReplace( "\s+[\n\r]+", chr( 10 ), "ALL" );
 				service.debugResult( htmlstring = result, label = "Result" );
 				return result;
 			},
