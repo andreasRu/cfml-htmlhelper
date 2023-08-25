@@ -1,7 +1,7 @@
 component output = false {
 
 	/**********************************************************
-	 *  HTMLHelper.cfc Version 0.9.4:
+	 *  HTMLHelper.cfc Version 0.9.5:
 	 *  A lambda function expressions delivering component that enables
 	 *  basic HTML minifying and html encoding features for trusted HTML
 	 *  For more information please visit:
@@ -14,25 +14,30 @@ component output = false {
 
 	public function init() {
 		local.service = {
-			"version"      : "0.9.4",
+			"version"      : "0.9.5",
 			"startTickCount": getTickCount(),
-			"debug"        : true,
+			"timerTickCount": getTickCount(),
+			
+			"debug"        : false,
 			"demarkerStart": "_1.",
 			"demarkerEnd"  : "_2.",
 			"debugResult"  : function( htmlstring, label = "", regexForDump ) {
 				// if set to debug force output!
 				if( service.debug ) {
-					writeOutput( "<hr>" & label & ":" );
+					
 					if( !arguments.label=="result" ){ 
-						writeOutput( "HtmlString.Length(): " & len( arguments.HtmlString ) ) ;
+						writeOutput( "<hr>");
+						writeOutput( label & ":<br>" );
+						writeOutput( "Chars: " & len( arguments.HtmlString ) ) ;
 				
 					}else{
-						writeOutput( "TimeStamp: " & ((getTickCount() - service.startTickCount)) & "ms" ) ;
-						service.startTickCount=getTickCount();
+						writeOutput( "<br>Result in: " & ((getTickCount() - service.timerTickCount)) & "ms" ) ;
+						writeOutput( "<br>TotalTime: " & ((getTickCount() - service.startTickCount)) & "ms" ) ;
+						service.timerTickCount=getTickCount();
 					}
 					
 					if( structKeyExists( arguments, "regexForDump" ) ) {
-						writeOutput( "Regex: /" & encodeForHTML( arguments.regexForDump ) & "/" );
+						writeOutput( "<br>Regex: /" & encodeForHTML( arguments.regexForDump ) & "/" );
 						//dump( htmlstring.reMatch( arguments.regexForDump ) );
 						
 					}
@@ -89,7 +94,7 @@ component output = false {
 				result          = arguments.htmlcontent;
 				service.debugResult( htmlstring = result, label = "compressNewLines" );
 
-				stringsToRemove.append( result.reMatch( "[\n\r]+" ), true ); // compress spaces/tabs to single spaces
+				stringsToRemove.append( result.reMatch( "[\s\n\r]+" ), true ); // compress spaces/tabs to single spaces
 				result = service.reduceArrayAndReplaceString( stringsToRemove, result, arguments.replaceWith );
 				service.debugResult( htmlstring = result, label = "Result" );
 				return result;
@@ -141,8 +146,7 @@ component output = false {
 			"minifyHtml": function(
 				required string htmlString,
 				boolean stripScriptAndCssComments,
-				boolean stripHtmlComments,
-				boolean stripEmptySpacesBetweenHtmlElements
+				boolean stripHtmlComments
 			) {
 				stringsToMap = [];
 				unmapper     = [ : ];
@@ -162,10 +166,12 @@ component output = false {
 
 
 				// whitespace 1
+				result = trim( service.stripEmptySpacesBetweenHtmlElements( result, "><" ) );
+				// whitespace 2
 				result = trim( service.compressBlankSpaces( result ) );
 
 				if( argStripHtmlComments ) {
-					result = service.stripHtmlComments( result );
+					result = trim( service.stripHtmlComments( result ));
 				}
 
 				if( argStripScriptAndCssComments ) {
@@ -173,14 +179,14 @@ component output = false {
 					result = service.stripSingleLineComments( result );
 				}
 
-				// whitespace new lines
+				// whitespace 3 new lines
 				if( argStripScriptAndCssComments ) {
-					result = service.compressNewLines( result, "" );
+					result = service.compressNewLines( result, " " );
 				} else {
 					// make sure compressing new lines won't break the page because of double slashed "//" comments
 					// better would be a function that converts // comments into /* multiline */
 					result = service.stripSingleLineComments( result );
-					result = service.compressNewLines( result, "" );
+					result = service.compressNewLines( result, " " );
 					// result = service.compressNewLines( result, chr(10) );
 				}
 
@@ -188,11 +194,7 @@ component output = false {
 					return content.replace( key, value );
 				}, result );
 
-				if( argStripEmptySpacesBetweenHtmlElements ) {
-					result = service.stripEmptySpacesBetweenHtmlElements( result, "><" );
-				} else {
-					result = service.stripEmptySpacesBetweenHtmlElements( result, ">#chr( 10 )#<" );
-				}
+				
 				return result;
 			}
 		}
