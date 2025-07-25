@@ -1,4 +1,4 @@
-# HtmlHelper.cfc (Vers. 0.9.5)
+# HtmlHelper.cfc (Vers. 0.9.6)
 
 ---
 
